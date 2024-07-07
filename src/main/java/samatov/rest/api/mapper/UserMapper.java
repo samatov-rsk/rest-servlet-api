@@ -12,7 +12,7 @@ public class UserMapper {
                 .id(userDTO.getId())
                 .name(userDTO.getName())
                 .events(userDTO.getEvents().stream()
-                        .map(EventMapper::toEventEntity)
+                        .map(EventMapper::toEventEntityWithoutUser)
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -22,8 +22,22 @@ public class UserMapper {
                 .id(user.getId())
                 .name(user.getName())
                 .events(user.getEvents().stream()
-                        .map(EventMapper::toEventDto)
+                        .map(EventMapper::toEventDtoWithoutUser)
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public static User toUserEntityWithoutEvents(UserDTO user) {
+        return User.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .build();
+    }
+
+    public static UserDTO toUserDTOWithoutEvents(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
                 .build();
     }
 }

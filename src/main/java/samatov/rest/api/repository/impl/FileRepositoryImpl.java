@@ -6,7 +6,6 @@ import org.hibernate.query.Query;
 import samatov.rest.api.config.HibernateConfig;
 import samatov.rest.api.exception.FileException;
 import samatov.rest.api.exception.NotFoundException;
-import samatov.rest.api.exception.UserException;
 import samatov.rest.api.model.File;
 import samatov.rest.api.repository.FileRepository;
 
@@ -49,7 +48,7 @@ public class FileRepositoryImpl implements FileRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new UserException("Ошибка запроса, пользователя не удалось сохранить...");
+            throw new FileException("Ошибка запроса, файл не удалось сохранить...");
         }
     }
 }

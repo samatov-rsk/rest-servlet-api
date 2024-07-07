@@ -13,24 +13,28 @@ import java.util.List;
 
 public class EventRepositoryImpl implements EventRepository {
 
-    @Override
     public List<Event> findAll() {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<Event> query = session.createQuery("FROM Event", Event.class);
+            Query<Event> query =
+                    session.createQuery("SELECT e FROM Event e JOIN FETCH e.user JOIN FETCH e.file", Event.class);
             return query.list();
         } catch (Exception e) {
-            throw new EventException("Ошибка запроса, события не найдены");
+            throw new RuntimeException("Ошибка запроса, события не найдены", e);
         }
     }
 
-    @Override
     public Event findById(Integer id) {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Event event = session.get(Event.class, id);
+            Query<Event> query = session.createQuery(
+                    "SELECT e FROM Event e JOIN FETCH e.user JOIN FETCH e.file WHERE e.id = :id", Event.class);
+            query.setParameter("id", id);
+            Event event = query.uniqueResult();
             if (event == null) {
                 throw new NotFoundException("Ошибка запроса, событие с указанным id:=" + id + " не найдено...");
             }
             return event;
+        } catch (NotFoundException e) {
+            throw e;
         } catch (Exception e) {
             throw new EventException("Ошибка запроса, событие с указанным id:=" + id + " не найдено...");
         }

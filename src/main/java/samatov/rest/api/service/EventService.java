@@ -6,6 +6,7 @@ import samatov.rest.api.dto.EventDTO;
 import samatov.rest.api.mapper.EventMapper;
 import samatov.rest.api.model.Event;
 import samatov.rest.api.repository.EventRepository;
+import samatov.rest.api.repository.impl.EventRepositoryImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class EventService {
+    public EventService() {
+        this.eventRepository = new EventRepositoryImpl();
+    }
 
     private final EventRepository eventRepository;
 

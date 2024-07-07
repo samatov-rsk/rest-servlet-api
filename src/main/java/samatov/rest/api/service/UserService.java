@@ -16,11 +16,15 @@ public class UserService {
 
     private final UserRepositoryImpl userRepository;
 
+    public UserService() {
+        this.userRepository = new UserRepositoryImpl();
+    }
+
     public List<UserDTO> getAllUser() {
         log.info("Получение всех пользователей");
-        List<User> labels = userRepository.findAll();
-        log.info("Найдено {} пользователей", labels.size());
-        return labels.stream()
+        List<User> users = userRepository.findAll();
+        log.info("Найдено {} пользователей", users.size());
+        return users.stream()
                 .map(UserMapper::toUserDTO)
                 .collect(Collectors.toList());
     }

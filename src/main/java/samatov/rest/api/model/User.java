@@ -20,6 +20,6 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> events;
 }

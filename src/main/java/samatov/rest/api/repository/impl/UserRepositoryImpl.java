@@ -13,13 +13,12 @@ import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    @Override
     public List<User> findAll() {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<User> query = session.createQuery("FROM User", User.class);
+            Query<User> query = session.createQuery("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.events e LEFT JOIN FETCH e.file", User.class);
             return query.list();
         } catch (Exception e) {
-            throw new UserException("Ошибка запроса, пользователи не найдены...");
+            throw new RuntimeException("Ошибка запроса, пользователи не найдены...", e);
         }
     }
 
