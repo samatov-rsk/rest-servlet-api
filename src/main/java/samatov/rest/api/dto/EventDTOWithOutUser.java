@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
+public class EventDTOWithOutUser {
     private Integer id;
-    private UserDTO user;
+    private UserDTOWithOutEvents user;
     private FileDTO file;
 }

@@ -11,8 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTO {
+public class  UserDTO {
     private Integer id;
     private String name;
-    private List<EventDTO> events;
+    private List<EventDTOWithOutUser> events;
 }

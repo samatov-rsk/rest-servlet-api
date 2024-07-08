@@ -1,9 +1,15 @@
 package samatov.rest.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import samatov.rest.api.dto.FileDTO;
+import samatov.rest.api.repository.impl.EventRepositoryImpl;
+import samatov.rest.api.repository.impl.FileRepositoryImpl;
+import samatov.rest.api.repository.impl.UserRepositoryImpl;
+import samatov.rest.api.service.EventService;
 import samatov.rest.api.service.FileService;
+import samatov.rest.api.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -18,16 +24,26 @@ import java.util.List;
 
 @Slf4j
 @MultipartConfig
+@RequiredArgsConstructor
 @WebServlet("/rest/api/v1/files/*")
 public class FileController extends HttpServlet {
 
-    private final FileService fileService = new FileService();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private FileService fileService;
+    private UserService userService;
+    private EventService eventService;
+    private ObjectMapper objectMapper;
 
 
     @Override
     public void init() throws ServletException {
         super.init();
+        FileRepositoryImpl fileRepository = new FileRepositoryImpl();
+        EventRepositoryImpl eventRepository = new EventRepositoryImpl();
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        this.eventService = new EventService(eventRepository);
+        this.userService = new UserService(userRepository);
+        this.fileService = new FileService(fileRepository,eventService,userService);
+        this.objectMapper = new ObjectMapper();
         log.info("UserController servlet initialized");
     }
 
@@ -51,17 +67,21 @@ public class FileController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json; charset=UTF-8");
+
         String userId = req.getHeader("userId");
         if (userId == null || userId.isEmpty()) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Missing userId header");
+            resp.getWriter().write("{\"error\": \"Missing userId header\"}");
             return;
         }
 
         Part filePart = req.getPart("file");
         if (filePart == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Missing file part");
+            resp.getWriter().write("{\"error\": \"Missing file part\"}");
             return;
         }
 
@@ -69,12 +89,12 @@ public class FileController extends HttpServlet {
 
         try (InputStream input = filePart.getInputStream()) {
             FileDTO fileDTO = fileService.uploadFile(userId, fileName, input);
-            resp.setContentType("application/json");
+            resp.setContentType("application/json; charset=UTF-8");
             objectMapper.writeValue(resp.getOutputStream(), fileDTO);
         } catch (Exception e) {
             log.error("Error uploading file", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("Error uploading file");
+            resp.getWriter().write("{\"error\": \"Error uploading file: " + e.getMessage() + "\"}");
         }
     }
 }

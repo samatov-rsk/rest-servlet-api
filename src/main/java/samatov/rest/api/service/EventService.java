@@ -2,11 +2,10 @@ package samatov.rest.api.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import samatov.rest.api.dto.EventDTO;
+import samatov.rest.api.dto.EventDTOWithOutUser;
 import samatov.rest.api.mapper.EventMapper;
 import samatov.rest.api.model.Event;
 import samatov.rest.api.repository.EventRepository;
-import samatov.rest.api.repository.impl.EventRepositoryImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,13 +13,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class EventService {
-    public EventService() {
-        this.eventRepository = new EventRepositoryImpl();
-    }
 
     private final EventRepository eventRepository;
 
-    public List<EventDTO> getAllEvents() {
+    public List<EventDTOWithOutUser> getAllEvents() {
         log.info("Получение всех событий");
         List<Event> events = eventRepository.findAll();
         log.info("Найдено {} событий", events.size());
@@ -29,14 +25,14 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public EventDTO getEventById(Integer id) {
+    public EventDTOWithOutUser getEventById(Integer id) {
         log.info("Получение события по id: {}", id);
         Event event = eventRepository.findById(id);
         log.info("Получено событие с id: {}", id);
         return EventMapper.toEventDto(event);
     }
 
-    public EventDTO createEvent(EventDTO eventDTO) {
+    public EventDTOWithOutUser createEvent(EventDTOWithOutUser eventDTO) {
         log.info("Добавление нового события: {}", eventDTO);
         Event event = EventMapper.toEventEntity(eventDTO);
         event = eventRepository.save(event);

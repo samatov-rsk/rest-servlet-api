@@ -1,8 +1,10 @@
 package samatov.rest.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import samatov.rest.api.dto.UserDTO;
+import samatov.rest.api.dto.UserDTOWithOutEvents;
 import samatov.rest.api.repository.impl.UserRepositoryImpl;
 import samatov.rest.api.service.UserService;
 
@@ -16,18 +18,11 @@ import java.util.List;
 
 @Slf4j
 @WebServlet("/rest/api/v1/users/*")
+@RequiredArgsConstructor
 public class UserController extends HttpServlet {
 
     private UserService userService;
     private ObjectMapper objectMapper;
-
-    public UserController() {
-    }
-
-    public UserController(UserService userService, ObjectMapper objectMapper) {
-        this.userService = userService;
-        this.objectMapper = objectMapper;
-    }
 
     @Override
     public void init() throws ServletException {
@@ -63,7 +58,7 @@ public class UserController extends HttpServlet {
     private void getUserById(HttpServletRequest req, HttpServletResponse resp, String userId) throws IOException {
         try {
             Integer id = Integer.parseInt(userId);
-            UserDTO user = userService.getUserById(id);
+            UserDTOWithOutEvents user = userService.getUserById(id);
             resp.setContentType("application/json");
             objectMapper.writeValue(resp.getOutputStream(), user);
         } catch (NumberFormatException e) {
@@ -76,8 +71,8 @@ public class UserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("Received POST request");
-        UserDTO userDTO = objectMapper.readValue(req.getInputStream(), UserDTO.class);
-        UserDTO newUser = userService.createUser(userDTO);
+        UserDTOWithOutEvents userDTO = objectMapper.readValue(req.getInputStream(), UserDTOWithOutEvents.class);
+        UserDTOWithOutEvents newUser = userService.createUser(userDTO);
         resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_CREATED);
         objectMapper.writeValue(resp.getOutputStream(), newUser);
@@ -90,9 +85,9 @@ public class UserController extends HttpServlet {
         String[] splits = pathInfo.split("/");
         if (splits.length == 2) {
             Integer id = Integer.parseInt(splits[1]);
-            UserDTO userDTO = objectMapper.readValue(req.getInputStream(), UserDTO.class);
+            UserDTOWithOutEvents userDTO = objectMapper.readValue(req.getInputStream(), UserDTOWithOutEvents.class);
             userDTO.setId(id);
-            UserDTO updatedUser = userService.updateUser(userDTO);
+            UserDTOWithOutEvents updatedUser = userService.updateUser(userDTO);
             resp.setContentType("application/json");
             objectMapper.writeValue(resp.getOutputStream(), updatedUser);
         }
