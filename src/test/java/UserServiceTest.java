@@ -1,6 +1,3 @@
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,16 +6,18 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import samatov.rest.api.dto.UserDTO;
 import samatov.rest.api.dto.UserDTOWithOutEvents;
+import samatov.rest.api.exception.NotFoundException;
 import samatov.rest.api.mapper.UserMapper;
 import samatov.rest.api.model.User;
-import samatov.rest.api.repository.UserRepository;
 import samatov.rest.api.repository.impl.UserRepositoryImpl;
 import samatov.rest.api.service.UserService;
-import samatov.rest.api.exception.NotFoundException;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 

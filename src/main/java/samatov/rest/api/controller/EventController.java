@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import samatov.rest.api.dto.EventDTOWithOutUser;
 import samatov.rest.api.repository.impl.EventRepositoryImpl;
-import samatov.rest.api.repository.impl.UserRepositoryImpl;
 import samatov.rest.api.service.EventService;
-import samatov.rest.api.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

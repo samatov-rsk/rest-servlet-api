@@ -2,11 +2,12 @@ package samatov.rest.api.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import samatov.rest.api.dto.*;
+import samatov.rest.api.dto.EventDTOWithOutUser;
+import samatov.rest.api.dto.FileDTO;
+import samatov.rest.api.dto.UserDTOWithOutEvents;
 import samatov.rest.api.mapper.FileMapper;
 import samatov.rest.api.model.File;
 import samatov.rest.api.repository.FileRepository;
-import samatov.rest.api.repository.impl.FileRepositoryImpl;
 
 import javax.servlet.http.Part;
 import java.io.IOException;

@@ -7,7 +7,6 @@ import samatov.rest.api.dto.UserDTOWithOutEvents;
 import samatov.rest.api.mapper.UserMapper;
 import samatov.rest.api.model.User;
 import samatov.rest.api.repository.UserRepository;
-import samatov.rest.api.repository.impl.UserRepositoryImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
